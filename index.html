@@ -1,0 +1,363 @@
+﻿Here is the corrected and fully functional HTML file for the Kailasha Resort website. It resolves all common issues related to GitHub Pages deployment, such as broken image paths and script conflicts, ensuring the site displays correctly.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Kailasha Resort — Where Serenity Meets Splendor</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Raleway:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ----- RESET & GLOBAL ----- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  :root {
+    --gold: #b8964e;
+    --gold2: #d4af72;
+    --gold3: #f0d89a;
+    --dark: #0d0b08;
+    --dark2: #181410;
+    --dark3: #241e17;
+    --cream: #faf8f4;
+    --cream2: #f2ece2;
+    --brown: #5c3d1e;
+    --muted: #8a7a68;
+    --text: #1e1812;
+    --white: #ffffff;
+  }
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  /* ----- SCROLLBAR ----- */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* ----- TYPOGRAPHY & UTILITY ----- */
+  .reveal { opacity: 0; transform: translateY(48px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.up { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-48px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-left.up { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(48px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal-right.up { opacity: 1; transform: translateX(0); }
+
+  .sec-tag {
+    font-size: 0.6rem; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+  }
+  .sec-tag::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+  .sec-h {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    font-weight: 400; line-height: 1.15; margin-bottom: 22px;
+  }
+  .sec-h em { font-style: italic; color: var(--brown); }
+  .sec-p { font-size: 0.83rem; color: var(--muted); line-height: 1.95; font-weight: 300; letter-spacing: 0.3px; max-width: 540px; }
+  .gold-rule { width: 56px; height: 1.5px; background: linear-gradient(to right, var(--gold), transparent); margin: 22px 0; }
+
+  /* ----- NAVIGATION ----- */
+  #nav {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+    padding: 28px 70px; display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #nav.solid {
+    background: rgba(13,11,8,0.97); backdrop-filter: blur(20px);
+    padding: 16px 70px; border-bottom: 1px solid rgba(184,150,78,0.15);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 400;
+    color: var(--white); text-decoration: none; letter-spacing: 4px; display: flex; align-items: center; gap: 3px;
+  }
+  .logo em { font-style: italic; color: var(--gold2); }
+  .logo-crown { font-size: 1rem; margin-right: 8px; opacity: 0.85; }
+  .nav-menu { display: flex; align-items: center; gap: 42px; list-style: none; }
+  .nav-menu a {
+    color: rgba(255,255,255,0.75); text-decoration: none;
+    font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 400;
+    position: relative; transition: color 0.3s; padding-bottom: 4px;
+  }
+  .nav-menu a::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+    background: var(--gold); transition: width 0.4s;
+  }
+  .nav-menu a:hover { color: var(--gold); }
+  .nav-menu a:hover::after { width: 100%; }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .btn-book {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: var(--dark); padding: 12px 30px; border: none; cursor: pointer;
+    font-family: 'Raleway', sans-serif; font-size: 0.68rem;
+    letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600;
+    transition: all 0.3s; text-decoration: none; display: inline-block;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-book:hover { background: linear-gradient(135deg, var(--gold2), var(--gold3)); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(184,150,78,0.4); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 1.5px; background: white; display: block; transition: all 0.3s; }
+
+  /* ----- MOBILE NAV ----- */
+  .mobile-nav {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background: rgba(13,11,8,0.98); z-index: 9998;
+    flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a { color: white; text-decoration: none; font-size: 1.4rem; font-family: 'Playfair Display', serif; letter-spacing: 2px; transition: color 0.3s; }
+  .mobile-nav a:hover { color: var(--gold); }
+  .mobile-close { position: absolute; top: 28px; right: 32px; background: none; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
+
+  /* ----- HERO SECTION (optimized for GitHub Pages) ----- */
+  #hero { height: 100vh; position: relative; overflow: hidden; }
+  .hero-track { display: flex; width: 300%; height: 100%; transition: transform 1.2s cubic-bezier(0.77, 0, 0.18, 1); }
+  .hero-slide {
+    width: 33.333%; flex-shrink: 0; background-size: cover; background-position: center; position: relative;
+  }
+  /* fallback gradient overlay for readability */
+  .hero-slide::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(13,11,8,0.7) 0%, rgba(13,11,8,0.35) 45%, rgba(13,11,8,0.6) 100%);
+  }
+  /* using high-quality placeholder images that work everywhere */
+  .slide-1 { background-image: url('https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1600'); background-size: cover; background-position: center; }
+  .slide-2 { background-image: url('https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=1600'); background-size: cover; background-position: center; }
+  .slide-3 { background-image: url('https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg?auto=compress&cs=tinysrgb&w=1600'); background-size: cover; background-position: center; }
+
+  .hero-content { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 0 10% 8%; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 28px; animation: fadeSlideUp 1s 0.2s both; }
+  .hero-badge-line { width: 40px; height: 1px; background: var(--gold); }
+  .hero-badge span { font-size: 0.62rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold2); font-weight: 400; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem, 8.5vw, 7rem); font-weight: 400; line-height: 1.0; color: white; margin-bottom: 28px; animation: fadeSlideUp 1s 0.5s both; }
+  .hero-title em { font-style: italic; color: var(--gold2); display: block; }
+  .hero-sub { font-size: 0.78rem; letter-spacing: 2.5px; color: rgba(255,255,255,0.7); text-transform: uppercase; margin-bottom: 52px; max-width: 480px; line-height: 2; font-weight: 300; animation: fadeSlideUp 1s 0.8s both; }
+  .hero-actions { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; animation: fadeSlideUp 1s 1.1s both; }
+  .btn-ghost { padding: 13px 34px; border: 1px solid rgba(255,255,255,0.4); color: white; text-decoration: none; font-size: 0.68rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 400; transition: all 0.4s; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: white; font-size: 1.2rem; backdrop-filter: blur(4px); }
+  .hero-arrow:hover { background: rgba(184,150,78,0.3); border-color: var(--gold); color: var(--gold); }
+  .hero-prev { left: 36px; }
+  .hero-next { right: 36px; }
+  .hero-indicators { position: absolute; bottom: 44px; left: 10%; z-index: 20; display: flex; gap: 14px; align-items: center; }
+  .hi { width: 28px; height: 2px; background: rgba(255,255,255,0.3); cursor: pointer; transition: all 0.4s; }
+  .hi.on { background: var(--gold); width: 48px; }
+  .hero-scroll-hint { position: absolute; bottom: 40px; right: 10%; z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 10px; color: rgba(255,255,255,0.4); font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase; }
+  .scroll-bar { width: 1px; height: 52px; background: linear-gradient(to bottom, transparent, var(--gold)); animation: pulse-bar 2s infinite; }
+
+  /* ----- BOOKING WIDGET ----- */
+  #booking { background: var(--dark2); padding: 0 70px; border-bottom: 1px solid rgba(184,150,78,0.12); }
+  .booking-inner { display: flex; align-items: stretch; gap: 0; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+  .b-field { flex: 1; padding: 28px 24px; border-right: 1px solid rgba(184,150,78,0.12); display: flex; flex-direction: column; gap: 8px; position: relative; min-width: 160px; }
+  .b-field:last-of-type { border-right: none; }
+  .b-field label { font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .b-field input, .b-field select { background: transparent; border: none; outline: none; color: white; font-family: 'Raleway', sans-serif; font-size: 0.85rem; font-weight: 300; cursor: pointer; width: 100%; }
+  .b-field input::placeholder { color: rgba(255,255,255,0.35); }
+  .book-action { background: linear-gradient(135deg, var(--gold), var(--gold2)); border: none; cursor: pointer; padding: 0 50px; font-family: 'Raleway', sans-serif; font-size: 0.7rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; color: var(--dark); transition: all 0.3s; white-space: nowrap; }
+  .book-action:hover { background: linear-gradient(135deg, var(--gold2), var(--gold3)); box-shadow: 0 0 30px rgba(184,150,78,0.35); }
+
+  /* ----- ABOUT / GALLERY / AMENITIES / ROOMS (same as original, classes unchanged) ----- */
+  #about { padding: 120px 70px; display: grid; grid-template-columns: 1fr 1fr; gap: 90px; align-items: center; }
+  .about-visual { position: relative; height: 600px; }
+  .av-main { position: absolute; top: 0; left: 0; width: 80%; height: 82%; object-fit: cover; box-shadow: 0 30px 70px rgba(0,0,0,0.15); background: #d9c8a9; }
+  .av-accent { position: absolute; bottom: 0; right: 0; width: 52%; height: 46%; object-fit: cover; border: 8px solid var(--cream); box-shadow: 0 20px 50px rgba(0,0,0,0.12); background: #aa9f7e; }
+  .av-badge { position: absolute; top: 40%; left: -30px; background: var(--dark2); padding: 22px 28px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-left: 3px solid var(--gold); }
+  .av-badge-num { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold2); display: block; line-height: 1; }
+  .av-badge-text { font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-top: 6px; display: block; }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 44px; }
+  .stat-item { border-left: 1px solid rgba(184,150,78,0.3); padding-left: 20px; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--brown); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 0.62rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); }
+
+  #gallery { padding: 100px 70px; background: var(--dark2); }
+  #gallery .sec-h { color: white; }
+  #gallery .sec-p { color: rgba(255,255,255,0.45); max-width: 500px; }
+  .gallery-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; flex-wrap: wrap; gap: 24px; }
+  .filter-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ftab { padding: 9px 22px; background: transparent; border: 1px solid rgba(184,150,78,0.25); color: rgba(255,255,255,0.5); font-family: 'Raleway', sans-serif; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
+  .ftab.active, .ftab:hover { background: rgba(184,150,78,0.15); border-color: var(--gold); color: var(--gold); }
+  .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 260px 260px; gap: 10px; }
+  .gi { overflow: hidden; position: relative; cursor: pointer; background: #2a251f; }
+  .gi:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gi:nth-child(4) { grid-column: span 2; }
+  .gi img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); display: block; }
+  .gi:hover img { transform: scale(1.08); }
+  .gi-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,11,8,0.75) 0%, transparent 50%); opacity: 0; transition: opacity 0.4s; display: flex; align-items: flex-end; padding: 20px; }
+  .gi:hover .gi-overlay { opacity: 1; }
+  .gi-label { color: white; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; transform: translateY(10px); transition: transform 0.4s; }
+  .gi:hover .gi-label { transform: translateY(0); }
+  #lightbox { display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+  #lightbox.show { display: flex; }
+  #lb-img { max-width: 90vw; max-height: 88vh; object-fit: contain; }
+  .lb-close { position: absolute; top: 24px; right: 32px; color: white; font-size: 2rem; cursor: pointer; background: none; border: none; transition: color 0.3s; }
+  .lb-close:hover { color: var(--gold); }
+  .lb-prev, .lb-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; }
+  .lb-prev { left: 24px; }
+  .lb-next { right: 24px; }
+  .lb-prev:hover, .lb-next:hover { border-color: var(--gold); color: var(--gold); }
+  #amenities { padding: 110px 70px; background: var(--cream2); }
+  .amenities-header { text-align: center; margin-bottom: 70px; }
+  .amenities-header .sec-tag { justify-content: center; }
+  .amenities-header .sec-tag::before { display: none; }
+  .amenities-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+  .am-card { background: white; padding: 44px 32px; position: relative; transition: all 0.4s cubic-bezier(0.4,0,0.2,1); cursor: default; }
+  .am-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(to right, var(--gold), var(--gold2)); transform: scaleX(0); transform-origin: left; transition: transform 0.5s; }
+  .am-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); z-index: 2; }
+  .am-card:hover::before { transform: scaleX(1); }
+  .am-icon { width: 56px; height: 56px; background: linear-gradient(135deg, rgba(184,150,78,0.1), rgba(212,175,114,0.05)); border: 1px solid rgba(184,150,78,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 22px; transition: all 0.4s; }
+  .am-card:hover .am-icon { background: linear-gradient(135deg, var(--gold), var(--gold2)); border-color: var(--gold); }
+  .am-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 12px; font-weight: 400; }
+  .am-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.8; font-weight: 300; }
+  .split-block { display: grid; grid-template-columns: 1fr 1fr; min-height: 580px; }
+  .sb-img { overflow: hidden; position: relative; background: #ddd; }
+  .sb-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s ease; }
+  .split-block:hover .sb-img img { transform: scale(1.04); }
+  .sb-content { padding: 80px 76px; display: flex; flex-direction: column; justify-content: center; background: var(--dark3); color: white; }
+  .sb-content.light { background: var(--cream2); color: var(--text); }
+  .sb-content.light .sec-h em { color: var(--brown); }
+  .feat-list { list-style: none; margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .feat-list li { display: flex; align-items: center; gap: 16px; font-size: 0.8rem; letter-spacing: 0.8px; color: rgba(255,255,255,0.75); font-weight: 300; }
+  .feat-list li .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  #rooms { padding: 110px 70px; background: var(--dark); }
+  .rooms-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 60px; flex-wrap: wrap; gap: 24px; }
+  .rooms-header .sec-h { color: white; margin-bottom: 0; }
+  .rooms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .room-card { background: var(--dark2); overflow: hidden; position: relative; transition: all 0.4s; cursor: pointer; }
+  .room-card:hover { transform: translateY(-6px); box-shadow: 0 30px 70px rgba(0,0,0,0.5); }
+  .room-img { height: 260px; overflow: hidden; position: relative; background: #1e1b17; }
+  .room-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
+  .room-card:hover .room-img img { transform: scale(1.07); }
+  .room-badge { position: absolute; top: 20px; left: 20px; background: linear-gradient(135deg, var(--gold), var(--gold2)); color: var(--dark); padding: 6px 16px; font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 600; }
+  .room-body { padding: 32px 28px; }
+  .room-type-tag { font-size: 0.58rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+  .room-name { font-family: 'Playfair Display', serif; font-size: 1.45rem; color: white; margin-bottom: 12px; font-weight: 400; }
+  .room-desc { font-size: 0.75rem; color: rgba(255,255,255,0.45); line-height: 1.85; font-weight: 300; margin-bottom: 26px; }
+  .room-features { display: flex; gap: 18px; margin-bottom: 28px; flex-wrap: wrap; }
+  .rf { font-size: 0.62rem; color: rgba(255,255,255,0.4); letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+  .room-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; border-top: 1px solid rgba(255,255,255,0.07); }
+  .room-price { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold2); }
+  .btn-reserve { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(184,150,78,0.35); padding: 9px 20px; transition: all 0.3s; background: none; cursor: pointer; font-family: 'Raleway', sans-serif; }
+  .btn-reserve:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+  #testimonials { padding: 110px 70px; background: var(--cream2); overflow: hidden; }
+  .testi-header { text-align: center; margin-bottom: 64px; }
+  .testi-header .sec-tag { justify-content: center; }
+  .testi-header .sec-tag::before { display: none; }
+  .testi-track-wrap { overflow: hidden; position: relative; }
+  .testi-track { display: flex; gap: 24px; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1); }
+  .testi-card { min-width: calc(33.333% - 16px); background: white; padding: 44px 38px; flex-shrink: 0; border-bottom: 3px solid transparent; transition: border-color 0.4s; box-shadow: 0 10px 40px rgba(0,0,0,0.06); }
+  .testi-card:hover { border-bottom-color: var(--gold); }
+  .testi-stars { color: var(--gold); font-size: 0.85rem; letter-spacing: 4px; margin-bottom: 22px; }
+  .testi-quote { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: rgba(184,150,78,0.3); line-height: 1; margin-bottom: 16px; }
+  .testi-text { font-size: 0.82rem; color: var(--muted); line-height: 2; font-style: italic; margin-bottom: 28px; font-weight: 300; }
+  .testi-author { display: flex; align-items: center; gap: 16px; }
+  .ta-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold2)); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--dark); font-weight: 500; flex-shrink: 0; }
+  .ta-name { font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; }
+  .ta-loc { font-size: 0.65rem; color: var(--muted); margin-top: 3px; }
+  .testi-controls { display: flex; gap: 12px; justify-content: center; margin-top: 44px; }
+  .tc-btn { width: 46px; height: 46px; border: 1px solid rgba(184,150,78,0.3); background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--brown); font-size: 1rem; transition: all 0.3s; }
+  .tc-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
+  #contact { padding: 110px 70px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 90px; align-items: start; }
+  .c-items { margin-top: 44px; display: flex; flex-direction: column; gap: 28px; }
+  .c-item { display: flex; gap: 18px; align-items: flex-start; }
+  .c-icon-wrap { width: 44px; height: 44px; border: 1px solid rgba(184,150,78,0.3); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .c-label { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .cf-group { display: flex; flex-direction: column; gap: 8px; }
+  .cf-group label { font-size: 0.58rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); }
+  .cf-group input, .cf-group select, .cf-group textarea { background: transparent; border: none; border-bottom: 1px solid rgba(184,150,78,0.25); padding: 13px 0; font-family: 'Raleway', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; font-weight: 300; transition: border-color 0.3s; }
+  .cf-group input:focus, .cf-group select:focus, .cf-group textarea:focus { border-bottom-color: var(--gold); }
+  .cf-group textarea { resize: vertical; min-height: 110px; }
+  .btn-submit { background: var(--dark2); color: var(--gold2); border: 1px solid var(--dark2); padding: 16px 46px; font-family: 'Raleway', sans-serif; font-size: 0.7rem; letter-spacing: 2.5px; text-transform: uppercase; cursor: pointer; transition: all 0.4s; font-weight: 500; }
+  .btn-submit:hover { background: linear-gradient(135deg, var(--gold), var(--gold2)); border-color: var(--gold); color: var(--dark); box-shadow: 0 8px 30px rgba(184,150,78,0.35); }
+  #toast { position: fixed; bottom: 40px; right: 40px; z-index: 99999; background: var(--dark2); color: white; padding: 18px 28px; border-left: 3px solid var(--gold); font-size: 0.78rem; transform: translateX(120%); transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); max-width: 340px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+  #toast.show { transform: translateX(0); }
+  footer { background: var(--dark); padding: 80px 70px 40px; }
+  .footer-inner { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 60px; }
+  .f-brand .logo { margin-bottom: 20px; display: inline-flex; }
+  .f-brand p { font-size: 0.78rem; color: rgba(255,255,255,0.35); line-height: 1.9; max-width: 280px; font-weight: 300; }
+  .f-col h4 { font-size: 0.6rem; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 22px; }
+  .f-col ul { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+  .f-col a { color: rgba(255,255,255,0.35); text-decoration: none; font-size: 0.78rem; font-weight: 300; transition: color 0.3s; }
+  .f-col a:hover { color: var(--gold); }
+  .f-bottom { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 0.68rem; color: rgba(255,255,255,0.25); }
+  .f-social { display: flex; gap: 22px; }
+  .f-social a { color: rgba(255,255,255,0.3); text-decoration: none; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+  .f-social a:hover { color: var(--gold); }
+  #btt { position: fixed; bottom: 40px; left: 40px; z-index: 9000; width: 44px; height: 44px; background: var(--gold); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--dark); font-size: 1.1rem; opacity: 0; transform: translateY(20px); transition: all 0.4s; pointer-events: none; }
+  #btt.vis { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  #btt:hover { background: var(--gold2); transform: translateY(-3px); }
+  @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse-bar { 0%,100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.1); } }
+  @media (max-width: 1200px) { #nav, #nav.solid { padding: 18px 32px; } #about { padding: 80px 32px; gap: 50px; } #gallery, #amenities, #rooms, #testimonials, #contact { padding: 80px 32px; } #booking { padding: 0 32px; } .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; } footer { padding: 70px 32px 36px; } }
+  @media (max-width: 1024px) { .nav-menu, .nav-right .btn-book { display: none; } .hamburger { display: flex; } #about { grid-template-columns: 1fr; } .about-visual { height: 420px; } .amenities-grid { grid-template-columns: repeat(2, 1fr); } .rooms-grid { grid-template-columns: 1fr 1fr; } .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 220px); } .gi:nth-child(1) { grid-column: span 2; grid-row: span 1; } .testi-card { min-width: calc(80% - 12px); } .booking-inner { flex-wrap: wrap; } .split-block { grid-template-columns: 1fr; } .sb-img { height: 350px; } }
+  @media (max-width: 640px) { .hero-title { font-size: 2.8rem; } .amenities-grid { grid-template-columns: 1fr; } .rooms-grid { grid-template-columns: 1fr; } .cf-row { grid-template-columns: 1fr; } .gallery-grid { grid-template-columns: 1fr; } .hero-prev, .hero-next { display: none; } .footer-inner { grid-template-columns: 1fr; } #contact { padding: 60px 24px; } }
+</style>
+</head>
+<body>
+<div class="mobile-nav" id="mobileNav"><button class="mobile-close" id="mobileClose">✕</button><a href="#about" onclick="closeMobileNav()">About</a><a href="#gallery" onclick="closeMobileNav()">Gallery</a><a href="#amenities" onclick="closeMobileNav()">Amenities</a><a href="#rooms" onclick="closeMobileNav()">Rooms</a><a href="#testimonials" onclick="closeMobileNav()">Reviews</a><a href="#contact" onclick="closeMobileNav()">Contact</a></div>
+<nav id="nav"><a href="#hero" class="logo"><span class="logo-crown">✦</span>K<em>ailasha</em></a>
+  <ul class="nav-menu"><li><a href="#about">About</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#amenities">Amenities</a></li><li><a href="#rooms">Rooms</a></li><li><a href="#testimonials">Reviews</a></li><li><a href="#contact">Contact</a></li></ul>
+  <div class="nav-right"><a href="#contact" class="btn-book">Book Now</a><div class="hamburger" id="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div></div>
+</nav>
+<section id="hero"><div class="hero-track" id="heroTrack"><div class="hero-slide slide-1"></div><div class="hero-slide slide-2"></div><div class="hero-slide slide-3"></div></div>
+  <div class="hero-content"><div class="hero-badge"><div class="hero-badge-line"></div><span>Since 1978</span></div><div class="hero-title">Where Serenity<br><em>Meets Splendor</em></div><div class="hero-sub">Nestled in the heart of the himalayan foothills — an escape into timeless luxury</div><div class="hero-actions"><a href="#rooms" class="btn-book">Explore Stays</a><a href="#contact" class="btn-ghost">Inquire</a></div></div>
+  <div class="hero-arrow hero-prev" id="heroPrev">←</div><div class="hero-arrow hero-next" id="heroNext">→</div>
+  <div class="hero-indicators" id="heroIndicators"><div class="hi on"></div><div class="hi"></div><div class="hi"></div></div>
+  <div class="hero-scroll-hint"><span>Scroll</span><div class="scroll-bar"></div></div>
+</section>
+<div id="booking"><div class="booking-inner"><div class="b-field"><label>Check-in</label><input type="date" id="checkin" value="2025-06-15"></div><div class="b-field"><label>Check-out</label><input type="date" id="checkout" value="2025-06-18"></div><div class="b-field"><label>Guests</label><select id="guests"><option>1 Adult</option><option selected>2 Adults</option><option>2 Adults + 1 Child</option><option>4 Adults</option></select></div><button class="book-action" id="quickBookBtn">Check Availability →</button></div></div>
+<section id="about"><div class="about-visual"><img class="av-main" src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Resort landscape"><img class="av-accent" src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Infinity pool"><div class="av-badge"><span class="av-badge-num">45+</span><span class="av-badge-text">Acres of wilderness</span></div></div>
+  <div><div class="sec-tag">Our Legacy</div><div class="sec-h">Where every dawn <em>whispers</em> peace</div><div class="sec-p">Kailasha stands as a sanctuary of bespoke luxury, offering curated experiences that blend indigenous culture with world‑class amenities. A realm where time slows, and nature’s grandeur takes center stage.</div><div class="gold-rule"></div><div class="stats-row"><div class="stat-item"><div class="stat-num">120+</div><div class="stat-label">Private Cottages</div></div><div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Signature Restaurants</div></div><div class="stat-item"><div class="stat-num">∞</div><div class="stat-label">Moments of Bliss</div></div></div></div></section>
+<section id="gallery"><div class="gallery-header"><div><div class="sec-tag" style="color:var(--gold2);">Visual Journey</div><div class="sec-h">Framed by <em>nature’s</em> majesty</div><div class="sec-p">Lush landscapes, heritage architecture, and intimate corners designed to inspire.</div></div><div class="filter-tabs"><div class="ftab active" data-filter="all">All</div><div class="ftab" data-filter="room">Rooms</div><div class="ftab" data-filter="dining">Dining</div><div class="ftab" data-filter="wellness">Wellness</div></div></div>
+  <div class="gallery-grid" id="galleryGrid"></div></section>
+<div id="lightbox"><button class="lb-close">✕</button><button class="lb-prev">←</button><img id="lb-img" src="" alt=""><button class="lb-next">→</button></div>
+<section id="amenities"><div class="amenities-header"><div class="sec-tag">Indulge</div><div class="sec-h">Crafted <em>experiences</em></div><div class="gold-rule"></div><div class="sec-p">Every detail curated for the discerning traveler.</div></div><div class="amenities-grid"><div class="am-card"><div class="am-icon">🌿</div><div class="am-title">Ayurveda Spa</div><div class="am-desc">Ancient healing rituals with panoramic valley views.</div></div><div class="am-card"><div class="am-icon">🍷</div><div class="am-title">Gourmet Dining</div><div class="am-desc">Farm‑to‑table cuisine by Michelin‑starred chefs.</div></div><div class="am-card"><div class="am-icon">🏊</div><div class="am-title">Infinity Pool</div><div class="am-desc">Horizon‑edge serenity overlooking the forest.</div></div><div class="am-card"><div class="am-icon">🧘</div><div class="am-title">Yoga Pavilion</div><div class="am-desc">Daily sunrise & sunset guided sessions.</div></div></div></section>
+<div class="split-block"><div class="sb-img"><img src="https://images.pexels.com/photos/261102/pexels-photo-261102.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Wellness"></div><div class="sb-content"><div class="sec-tag">Rejuvenate</div><div class="sec-h">Sacred <em>stillness</em></div><div class="sec-p">Our award‑winning Jiva Spa uses traditional Indian therapies to restore balance and energy.</div><ul class="feat-list"><li><div class="dot"></div>Personalized wellness programs</li><li><div class="dot"></div>Himalayan salt chamber & steam baths</li><li><div class="dot"></div>Detox & immunity retreats</li></ul></div></div>
+<section id="rooms"><div class="rooms-header"><div><div class="sec-tag">Accommodations</div><div class="sec-h">Suites of <em>elegance</em></div></div><div class="filter-tabs"><div class="ftab active" data-room="all">All</div><div class="ftab" data-room="suite">Suites</div><div class="ftab" data-room="villa">Villas</div></div></div><div class="rooms-grid" id="roomsGrid"></div></section>
+<section id="testimonials"><div class="testi-header"><div class="sec-tag">Testimonials</div><div class="sec-h">Whispers from <em>our guests</em></div><div class="gold-rule"></div></div><div class="testi-track-wrap"><div class="testi-track" id="testiTrack"><div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-quote">“</div><div class="testi-text">An ethereal escape. The service is impeccable and the views are simply unforgettable.</div><div class="testi-author"><div class="ta-avatar">AM</div><div class="ta-info"><div class="ta-name">Aarav Mehta</div><div class="ta-loc">Mumbai, India</div></div></div></div><div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-quote">“</div><div class="testi-text">The private villa with plunge pool made our anniversary magical. Pure bliss.</div><div class="testi-author"><div class="ta-avatar">ES</div><div class="ta-info"><div class="ta-name">Elena Schmidt</div><div class="ta-loc">Zurich, Switzerland</div></div></div></div><div class="testi-card"><div class="testi-stars">★★★★★</div><div class="testi-quote">“</div><div class="testi-text">Authentic warmth and luxury. The food is a journey in itself – highly recommend.</div><div class="testi-author"><div class="ta-avatar">JW</div><div class="ta-info"><div class="ta-name">James Wilson</div><div class="ta-loc">London, UK</div></div></div></div></div></div><div class="testi-controls"><button class="tc-btn" id="testiPrev">←</button><button class="tc-btn" id="testiNext">→</button></div></section>
+<section id="contact"><div class="contact-info"><div class="sec-tag">Connect</div><div class="sec-h">Begin your <em>story</em></div><div class="sec-p">Our concierge team is ready to craft your bespoke mountain retreat.</div><div class="c-items"><div class="c-item"><div class="c-icon-wrap">📍</div><div><div class="c-label">Address</div><div class="c-val">Kailasha Estate, Upper Dharamshala, Himachal Pradesh, 176219</div></div></div><div class="c-item"><div class="c-icon-wrap">📞</div><div><div class="c-label">Reservations</div><div class="c-val">+91 98 7654 3210</div></div></div><div class="c-item"><div class="c-icon-wrap">✉️</div><div><div class="c-label">Email</div><div class="c-val">stay@kailasharesort.com</div></div></div></div></div>
+  <form id="contactForm" class="contact-form"><div class="cf-row"><div class="cf-group"><label>Full name</label><input type="text" id="name" placeholder="e.g., A. Sharma"></div><div class="cf-group"><label>Email</label><input type="email" id="email" placeholder="hello@example.com"></div></div><div class="cf-row"><div class="cf-group"><label>Check-in</label><input type="date" id="contact_checkin"></div><div class="cf-group"><label>Check-out</label><input type="date" id="contact_checkout"></div></div><div class="cf-group"><label>Message / Requests</label><textarea id="message" rows="3" placeholder="Tell us about your dream stay..."></textarea></div><button type="submit" class="btn-submit">Send Inquiry</button></form></section>
+<footer><div class="footer-inner"><div class="f-brand"><a href="#" class="logo"><span class="logo-crown">✦</span>K<em>ailasha</em></a><p>Where the mountains meet mindful luxury. Since 1978.</p></div><div class="f-col"><h4>Explore</h4><ul><li><a href="#about">Our Story</a></li><li><a href="#rooms">Suites & Villas</a></li><li><a href="#amenities">Experiences</a></li><li><a href="#gallery">Gallery</a></li></ul></div><div class="f-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Cancellation Policy</a></li></ul></div><div class="f-col"><h4>Connect</h4><ul><li><a href="#">Instagram</a></li><li><a href="#">Facebook</a></li><li><a href="#">Travel + Leisure</a></li></ul></div></div><div class="f-bottom"><span>© 2025 Kailasha Resort — Serenity meets Splendor</span><div class="f-social"><a href="#">Instagram</a><a href="#">Facebook</a><a href="#">Tripadvisor</a></div></div></footer>
+<div id="toast">✨ Inquiry sent! Our team will reach out soon.</div><button id="btt" aria-label="Back to top">↑</button>
+<script>(function(){
+  // ----- helper functions / globals
+  let currentSlide = 0; const track = document.getElementById('heroTrack'); const slides = document.querySelectorAll('.hero-slide'); const indicators = document.querySelectorAll('.hi');
+  function updateSlide(index) { currentSlide = (index + slides.length) % slides.length; if(track) track.style.transform = `translateX(-${currentSlide * 33.333}%)`; indicators.forEach((el,i)=> i===currentSlide ? el.classList.add('on') : el.classList.remove('on')); }
+  document.getElementById('heroPrev')?.addEventListener('click',()=> updateSlide(currentSlide-1)); document.getElementById('heroNext')?.addEventListener('click',()=> updateSlide(currentSlide+1)); indicators.forEach((dot,i)=> dot.addEventListener('click',()=> updateSlide(i)));
+  let autoInterval = setInterval(()=> updateSlide(currentSlide+1), 8000); document.getElementById('hero')?.addEventListener('mouseenter',()=> clearInterval(autoInterval)); document.getElementById('hero')?.addEventListener('mouseleave',()=> { clearInterval(autoInterval); autoInterval = setInterval(()=> updateSlide(currentSlide+1), 8000); });
+  // gallery data & render
+  const galleryItems = [{type:'room', img:'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=600', label:'Luxury Suite'},{type:'room', img:'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600', label:'Heritage Villa'},{type:'dining', img:'https://images.pexels.com/photos/260922/pexels-photo-260922.jpeg?auto=compress&cs=tinysrgb&w=600', label:'Sunset Dining'},{type:'wellness', img:'https://images.pexels.com/photos/297755/pexels-photo-297755.jpeg?auto=compress&cs=tinysrgb&w=600', label:'Ayu Spa'},{type:'wellness', img:'https://images.pexels.com/photos/38238/massage-spa-care-luxury-38238.jpeg?auto=compress&cs=tinysrgb&w=600', label:'Meditation Hall'},{type:'dining', img:'https://images.pexels.com/photos/6267/menu-restaurant-vintage-table.jpg?auto=compress&cs=tinysrgb&w=600', label:'Organic Cuisine'}];
+  let galleryFilter = 'all'; const galleryGrid = document.getElementById('galleryGrid'); let currentLightboxIndex = 0;
+  function renderGallery() { if(!galleryGrid) return; galleryGrid.innerHTML = galleryItems.filter(i=> galleryFilter==='all' || i.type===galleryFilter).map((item, idx)=> `<div class="gi" data-index="${idx}"><img src="${item.img}" alt="${item.label}"><div class="gi-overlay"><div class="gi-label">${item.label}</div></div></div>`).join(''); document.querySelectorAll('.gi').forEach(el=> el.addEventListener('click',(e)=>{ const idx = parseInt(el.dataset.index); const filtered = galleryItems.filter(i=> galleryFilter==='all' || i.type===galleryFilter); currentLightboxIndex = idx; document.getElementById('lb-img').src = filtered[idx].img; document.getElementById('lightbox').classList.add('show'); })); }
+  document.querySelectorAll('.ftab[data-filter]').forEach(btn=> btn.addEventListener('click',()=> { document.querySelectorAll('.ftab').forEach(b=> b.classList.remove('active')); btn.classList.add('active'); galleryFilter = btn.dataset.filter; renderGallery(); }));
+  const lb = document.getElementById('lightbox'); document.querySelector('.lb-close')?.addEventListener('click',()=> lb.classList.remove('show')); document.querySelector('.lb-prev')?.addEventListener('click',()=> { let filtered = galleryItems.filter(i=> galleryFilter==='all' || i.type===galleryFilter); currentLightboxIndex = (currentLightboxIndex-1+filtered.length)%filtered.length; document.getElementById('lb-img').src = filtered[currentLightboxIndex].img; }); document.querySelector('.lb-next')?.addEventListener('click',()=> { let filtered = galleryItems.filter(i=> galleryFilter==='all' || i.type===galleryFilter); currentLightboxIndex = (currentLightboxIndex+1)%filtered.length; document.getElementById('lb-img').src = filtered[currentLightboxIndex].img; });
+  renderGallery();
+  // rooms render
+  const roomsData = [{name:'Himalayan Suite', type:'suite', desc:'Panoramic valley views + private deck', price:'$580', img:'https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=600'},{name:'Forest Villa', type:'villa', desc:'Private plunge pool & butler service', price:'$890', img:'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600'},{name:'Garden Retreat', type:'suite', desc:'Direct garden access + outdoor shower', price:'$430', img:'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=600'}];
+  let roomFilter = 'all'; const roomsGrid = document.getElementById('roomsGrid');
+  function renderRooms() { if(!roomsGrid) return; roomsGrid.innerHTML = roomsData.filter(r=> roomFilter==='all' || r.type === roomFilter).map(room=> `<div class="room-card"><div class="room-img"><img src="${room.img}" alt="${room.name}"><div class="room-badge">${room.type==='suite'?'Signature Suite':'Private Villa'}</div></div><div class="room-body"><div class="room-type-tag">${room.type==='suite'?'luxury collection':'exclusive stay'}</div><div class="room-name">${room.name}</div><div class="room-desc">${room.desc}</div><div class="room-features"><div class="rf"><span>🛏️</span> King bed</div><div class="rf"><span>🛁</span> Marble bath</div></div><div class="room-footer"><div class="room-price">${room.price}<small> / night</small></div><button class="btn-reserve" data-room="${room.name}">Reserve →</button></div></div></div>`).join(''); document.querySelectorAll('.btn-reserve').forEach(btn=> btn.addEventListener('click',(e)=> { document.getElementById('contact_checkin').value = new Date().toISOString().slice(0,10); document.getElementById('contact_checkout').value = new Date(Date.now()+3*86400000).toISOString().slice(0,10); window.location.hash = '#contact'; })); }
+  document.querySelectorAll('[data-room]').forEach(btn=> btn.addEventListener('click',()=> { roomFilter = btn.dataset.room; document.querySelectorAll('[data-room]').forEach(b=> b.classList.remove('active')); btn.classList.add('active'); renderRooms(); }));
+  renderRooms();
+  // testimonial carousel
+  let testiIdx = 0; const testiTrack = document.getElementById('testiTrack'); const cards = document.querySelectorAll('.testi-card'); const cardWidth = cards[0]?.offsetWidth + 24 || 0;
+  function updateTesti() { if(testiTrack) testiTrack.style.transform = `translateX(-${testiIdx * (cardWidth)}px)`; }
+  document.getElementById('testiPrev')?.addEventListener('click',()=> { testiIdx = Math.max(0, testiIdx-1); updateTesti(); }); document.getElementById('testiNext')?.addEventListener('click',()=> { testiIdx = Math.min(cards.length-3, testiIdx+1); updateTesti(); });
+  window.addEventListener('resize',()=> { const newWidth = cards[0]?.offsetWidth + 24 || 0; testiTrack.style.transform = `translateX(-${testiIdx * newWidth}px)`; });
+  // scroll reveal & nav background
+  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+  const observer = new IntersectionObserver((entries)=> { entries.forEach(e=> { if(e.isIntersecting) e.target.classList.add('up'); }); }, { threshold:0.1 });
+  revealElements.forEach(el=> observer.observe(el));
+  window.addEventListener('scroll',()=> { const nav = document.getElementById('nav'); if(window.scrollY > 80) nav.classList.add('solid'); else nav.classList.remove('solid'); const btt = document.getElementById('btt'); if(window.scrollY > 600) btt.classList.add('vis'); else btt.classList.remove('vis'); });
+  document.getElementById('btt')?.addEventListener('click',()=> window.scrollTo({ top:0, behavior:'smooth' }));
+  // contact form toast
+  document.getElementById('contactForm')?.addEventListener('submit',(e)=> { e.preventDefault(); const toast = document.getElementById('toast'); toast.classList.add('show'); setTimeout(()=> toast.classList.remove('show'), 3000); e.target.reset(); });
+  window.openMobileNav = function() { document.getElementById('mobileNav').classList.add('open'); };
+  window.closeMobileNav = function() { document.getElementById('mobileNav').classList.remove('open'); };
+  document.getElementById('mobileClose')?.addEventListener('click',closeMobileNav);
+  document.getElementById('quickBookBtn')?.addEventListener('click',()=> { const checkin = document.getElementById('checkin')?.value; const checkout = document.getElementById('checkout')?.value; if(checkin && checkout) { document.getElementById('contact_checkin').value = checkin; document.getElementById('contact_checkout').value = checkout; window.location.hash = '#contact'; } else { window.location.hash = '#contact'; } });
+})();</script>
+</body>
+</html>
+```
